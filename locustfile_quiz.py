@@ -9,10 +9,10 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 # Target
 # ---------------------------------------------------------------------------
-TARGET_HOST = "https://tuanemtramtinh.moodlecloud.com"
+TARGET_HOST = "https://tuanemtramtinhclone.moodlecloud.com"
 USERNAME = "chaonhom"
 PASSWORD = "sApTOIhanNopDA05"
-QUIZ_CM_ID = 63  # id= trong URL /mod/quiz/view.php?id=63
+QUIZ_CM_ID = 39  # id= trong URL /mod/quiz/view.php?id=39
 
 # ---------------------------------------------------------------------------
 # Performance SLOs
@@ -119,7 +119,7 @@ class MoodleQuizUser(HttpUser):
     def view_and_attempt_quiz(self):
         """
         Luồng chính:
-          1. GET /mod/quiz/view.php?id=63   — tải trang quiz
+          1. GET /mod/quiz/view.php?id=39   — tải trang quiz
           2. POST /mod/quiz/startattempt.php — click "Attempt quiz now"
         """
         if not self._logged_in:
@@ -131,7 +131,7 @@ class MoodleQuizUser(HttpUser):
             "/mod/quiz/view.php",
             params={"id": QUIZ_CM_ID},
             catch_response=True,
-            name="GET /mod/quiz/view.php?id=63",
+            name="GET /mod/quiz/view.php?id=39",
         ) as resp:
             if resp.status_code != 200:
                 resp.failure(f"Quiz view thất bại: {resp.status_code}")
@@ -147,7 +147,7 @@ class MoodleQuizUser(HttpUser):
             page_sesskey = _scrape_hidden(resp.text, "sesskey") or self._sesskey
 
         # Bước 4 — POST bắt đầu làm bài (tương đương click "Attempt quiz now")
-        # Moodle sẽ redirect đến /mod/quiz/attempt.php?attempt=X&cmid=63
+        # Moodle sẽ redirect đến /mod/quiz/attempt.php?attempt=X&cmid=39
         with self.client.post(
             "/mod/quiz/startattempt.php",
             data={
